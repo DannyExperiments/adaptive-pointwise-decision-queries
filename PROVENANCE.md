@@ -1,0 +1,5 @@
+# Provenance
+
+The official proceedings of Ye, Amin and Özdağlar ask the adaptive deployment question in §7, paper p. 13 (proceedings p. 6936). Their Definition 6 specifies pointwise recovery as a common optimum over the consistent fiber. The catalog statement at revision ca8d4d44ba3db527f19f28928c240168f545ecfe spells out the rational polyhedral scope and the comparison with fixed datasets. [Proceedings PDF](https://raw.githubusercontent.com/mlresearch/v336/main/assets/ye26a/ye26a.pdf#page=13) · [Pinned Q439](https://github.com/10m-u/open-problems-catalog/blob/ca8d4d44ba3db527f19f28928c240168f545ecfe/problems/mathematics/optimization-operations-research.md#q439)
+
+The manuscript reconstructs the recovered history recursion, optimal-policy synthesis and cube separation. It incorporates the bounded box and ellipsoid from the supplemental analysis. Fixed-dataset geometry is credited to Bennouna et al., and real quantifier elimination to Collins. [Literature audit](audits/public_safe_reports/LITERATURE_AUDIT.md) · [AI disclosure](AI_DISCLOSURE.md)

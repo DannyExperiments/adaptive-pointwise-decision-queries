@@ -1,0 +1,4 @@
+Open polyhedron: 275 exact optimizer checks for m=2 through 6.
+Bounded variants: 945 box checks, including 853 ellipsoid members.
+Explorer: 123 exact sign-and-route states, including interval endpoints.
+Finite diagnostics only; the exact general query-count algorithm is proved in the manuscript.

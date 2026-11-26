@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One answer picks the next</title>
+<style>
+*{box-sizing:border-box}body{background:#f4f7fb;color:#162943;font:1rem/1.45 system-ui,sans-serif;margin:0;padding:1.1rem}main{max-width:40rem;margin:auto}h1{font-size:clamp(1.8rem,6vw,2.8rem);line-height:1.12;margin:0}p{margin:.7rem 0}canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid #c4d4e6;border-radius:.8rem;touch-action:pan-y}label{display:block;margin:.75rem 0 .2rem;font-weight:700}input{width:100%}select{font:inherit;padding:.38rem;min-width:8rem}input:focus-visible,select:focus-visible{outline:3px solid #0071ab;outline-offset:3px}#route{font-weight:700;min-height:3em}.legend{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;font-weight:700;margin:.65rem 0}.legend span:nth-child(1){color:#007961}.legend span:nth-child(2){color:#0067ac}.legend span:nth-child(3){color:#8446a3}
+</style>
+<main>
+<h1>One answer picks the next</h1>
+<p>First measure t. Within one of the three disjoint intervals, its named gap z may have either sign. The other gaps are positive. Outside the intervals, the all-zero choice is already optimal.</p>
+<div class="legend"><span>z1 (3, 5)</span><span>z2 (6, 8)</span><span>z3 (9, 11)</span></div>
+<canvas id="costs" width="660" height="390" role="img" aria-label="Three lifted cost-gap plots. Each has a V-shaped lower boundary, whose negative wedge occurs in a separate interval for t."></canvas>
+<label for="angle">Rotate the plot</label>
+<input id="angle" type="range" min="-12" max="28" value="10">
+<label for="first">First answer t = <output id="tValue">7</output></label>
+<input id="first" type="range" min="8" max="48" value="28" aria-label="First answer t in quarter steps">
+<label for="second" id="answerLabel">Second answer z2</label>
+<select id="second"><option value="-1">Negative</option><option value="0">Zero (tie)</option><option value="1">Positive</option></select>
+<p id="route" aria-live="polite"></p>
+<p>The colored wedges show where negative answers are possible. The third plot axis separates the three gap indices. Two adaptive queries suffice in the worst case. Three fixed queries are necessary for this example.</p>
+</main>
+<script>
+'use strict';
+const node=id=>document.getElementById(id);
+const context=node('costs').getContext('2d');
+const colors=['#007961','#0067ac','#8446a3'];
+const fills=['#b9e5d8','#c2e1f7','#ead2f6'];
+function path(points,color,width) {
+  context.beginPath();
+  context.moveTo(...points[0]);
+  for(const p of points.slice(1))context.lineTo(...p);
+  context.strokeStyle=color;context.lineWidth=width;context.stroke();
+}
+function render() {
+  const t=Number(node('first').value)/4;
+  const phi=Number(node('angle').value)*Math.PI/180;
+  const sign=Number(node('second').value);
+  const active=[1,2,3].find(i=>3*i<t&&t<3*i+2);
+  const gap=active?(sign<0?Math.max(3*active-t,t-3*active-2)/2:sign/2):0;
+  const p=(u,i,w)=>{
+    const x=u-7,y=1.48*(i-2);
+    return [330+44*(Math.cos(phi)*x-Math.sin(phi)*y),202+42*(Math.sin(phi)*x+Math.cos(phi)*y)-70*w];
+  };
+  context.clearRect(0,0,660,390);
+  for(const i of [3,2,1]){
+    const a=3*i,b=a+2,j=i-1;
+    path([p(2.3,i,0),p(11.7,i,0)],'#bdccdc',3);
+    const wedge=[p(a,i,0),p(b,i,0),p(a+1,i,-1)];
+    context.beginPath();context.moveTo(...wedge[0]);
+    context.lineTo(...wedge[1]);context.lineTo(...wedge[2]);context.closePath();
+    context.fillStyle=fills[j];context.fill();
+    path([p(a-1,i,1),wedge[2],p(b+1,i,1)],colors[j],4);
+    path(wedge.slice(0,2),colors[j],6);
+    const [x,y]=p(2.3,i,0);
+    context.font='bold 24px system-ui';context.fillStyle=colors[j];
+    context.fillText('z'+i,x-39,y+5);
+  }
+  path([p(t,1,0),p(t,3,0)],'#162943',4);
+  if(active) {
+    const dot=p(t,active,gap);
+    path([p(t,active,0),dot],colors[active-1],5);
+    context.beginPath();context.arc(...dot,8,0,2*Math.PI);
+    context.fillStyle=colors[active-1];context.fill();
+  }
+  node('tValue').textContent=String(t);
+  node('first').setAttribute('aria-valuetext',String(t));
+  node('answerLabel').textContent=active?'Second answer z'+active:'Second query unnecessary';
+  node('second').disabled=!active;
+  node('route').textContent=active
+    ? 'Query only z'+active+' = '+gap+'. '+(gap<0?'Set x'+active+' to 1 and all other coordinates to 0.':'The all-zero choice is optimal.')
+    : 'No second query. All gaps are strictly positive, and the all-zero choice is optimal.';
+}
+for(const control of ['first','second','angle'])node(control).addEventListener('input',render);
+let drag=null;
+node('costs').addEventListener('pointerdown',event=>{
+  drag={x:event.clientX,angle:Number(node('angle').value)};
+  node('costs').setPointerCapture(event.pointerId);
+});
+node('costs').addEventListener('pointermove',event=>{
+  if(!drag)return;
+  node('angle').value=String(Math.max(-12,Math.min(28,drag.angle+(event.clientX-drag.x)/4)));
+  render();
+});
+for(const end of ['pointerup','pointercancel'])node('costs').addEventListener(end,()=>{drag=null;});
+render();
+</script>
+</html>

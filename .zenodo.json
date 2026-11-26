@@ -1,0 +1,31 @@
+{
+  "title": "Exact adaptive queries for pointwise decision sufficiency",
+  "upload_type": "software",
+  "publication_date": "2026-11-27",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "DannyExperiments"
+    }
+  ],
+  "keywords": [
+    "adaptive linear queries",
+    "pointwise decision sufficiency",
+    "linear optimization",
+    "query complexity",
+    "real quantifier elimination",
+    "semialgebraic policies",
+    "adaptive versus nonadaptive measurements"
+  ],
+  "description": "<p>This note answers the deployment-time adaptive query question in Ye, Amin and Özdağlar’s COLT 2026 proceedings, §7, paper page 13. For a bounded rational linear program and an open rational polyhedral cost prior, it computes the exact minimum worst-case number of deterministic real linear queries needed to return a common optimizer for the set of costs still consistent with the observed answers. It also constructs an optimal semialgebraic policy.</p><p>The proof represents each finite query history by its exact cost fiber. A history wins at depth zero when one feasible point is optimal throughout the fiber. A history wins at the next depth if it already wins at zero or if it admits a query whose every feasible answer leaves a winning shorter history. Real quantifier elimination decides these predicates, and cylindrical decomposition selects policy actions. The proof gives no efficient runtime or bit-complexity claim.</p><p>For every m ≥ 2, a nondegenerate cube has exactly two worst-case adaptive queries and exactly m fixed queries. A first measurement chooses at most one of several disjoint cost windows where an unresolved sign can affect the optimum. A fixed dataset must measure all m independent sign-change directions. The gap persists on a bounded rational box, with a separate bounded ellipsoid extension.</p><p>The deposit includes the PDF, LaTeX source, bibliography, citation metadata, an evidence archive and checksums. The exact replay tests the polyhedral, bounded-box and ellipsoid cases, and the 3D explorer responds to changes in the query transcript. Internally reviewed. External peer review is pending.</p><p>ChatGPT Astra 6.2 (OpenAI) generated the recovered proofs, bounded-prior supplement and original replay under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked primary sources and prepared the manuscript, extended replay and worked illustration. DannyExperiments is the project citation identity.</p>",
+  "access_right": "open",
+  "license": "other-closed",
+  "notes": "All rights reserved. Publicly downloadable files are supplied without a repository-wide reuse license.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DannyExperiments/adaptive-pointwise-decision-queries/releases/tag/v1.0.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

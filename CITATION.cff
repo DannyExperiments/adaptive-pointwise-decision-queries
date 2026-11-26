@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Cite this version of the research release."
+title: "Exact adaptive queries for pointwise decision sufficiency"
+authors:
+  - name: "DannyExperiments"
+type: software
+version: "1.0.0"
+date-released: 2026-11-27
+repository-code: "https://github.com/DannyExperiments/adaptive-pointwise-decision-queries"
+keywords:
+  - "adaptive linear queries"
+  - "pointwise decision sufficiency"
+  - "linear optimization"
+  - "query complexity"
+  - "real quantifier elimination"
+  - "semialgebraic policies"
+  - "adaptive versus nonadaptive measurements"
+doi: "10.5281/zenodo.24571145"
+url: "https://doi.org/10.5281/zenodo.24571145"
+preferred-citation:
+  type: software
+  title: "Exact adaptive queries for pointwise decision sufficiency"
+  authors:
+    - name: "DannyExperiments"
+  version: "1.0.0"
+  date-released: 2026-11-27
+  doi: "10.5281/zenodo.24571145"
+  url: "https://doi.org/10.5281/zenodo.24571145"
+  repository-code: "https://github.com/DannyExperiments/adaptive-pointwise-decision-queries"

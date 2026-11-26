@@ -1,0 +1,104 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[hmargin=.83in,vmargin=.70in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Exact adaptive queries for pointwise decision sufficiency}}
+\urlstyle{same}
+\setlength{\emergencystretch}{2em}
+\linespread{0.95}
+\DeclareMathSizes{8}{8}{8}{8}
+\DeclareMathSizes{9}{9}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\renewcommand{\bibliofont}{\normalsize\raggedright}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Win}{\operatorname{Win}}
+\newcommand{\Good}{\operatorname{Good}}
+\title[Exact adaptive queries for pointwise sufficiency]{Exact adaptive queries for pointwise decision sufficiency}
+\date{}
+\begin{document}
+\begin{abstract}
+An unknown linear cost is observed through exact linear queries, each of which can depend on earlier answers. We give an effective procedure to compute the minimum worst-case number of queries needed to produce a common optimizer for the remaining cost fiber. It also constructs a deterministic semialgebraic policy of minimum depth. For every $m\geq2$, a nondegenerate cube with an open rational polyhedral cost prior requires exactly two adaptive queries and exactly $m$ fixed queries. The same gap holds for a bounded rational box and a bounded rational ellipsoid. The procedure uses real quantifier elimination and makes no efficient runtime claim.
+\end{abstract}
+\maketitle
+
+\section{Model and results}
+Let $X=\{x\in\R^d:Ax=b,\ x\geq0\}$ be a nonempty bounded rational polytope. The unknown cost $c$ lies in an ambient-open nonempty convex rational polyhedron $C\subseteq\R^d$. In one query choose $q\in\R^d$ and receive the exact answer $q^\top c$. The next query can depend on all earlier answers. A deterministic policy can stop when it can return a point $x\in X$ that minimizes the objective for every cost consistent with the transcript. The cost remains fixed. Only the number of queries is counted. We allow arbitrary exact real query vectors and deterministic policies, with no regularity assumption.
+
+This is the deployment-time adaptive problem in the proceedings version of Ye, Amin and \"Ozda\u{g}lar \cite[\S7, p.~13]{ye}, in the pointwise sense of their Definition 6. Their adaptive construction of a pointwise dataset is a different operation. Here the deployment queries themselves branch on the hidden cost's answers.
+
+Write $D(X,C)$ for the minimum worst-case depth. Let $W(X,C)$ be the span of differences of vertices that optimize at some costs in $C$, and write $d^*=\dim W(X,C)$. The global fixed-dataset characterization of Bennouna et al.\ \cite[Corollary 1]{bennouna} identifies $d^*$ as the minimum number of fixed queries that recover the full argmin.
+
+\begin{theorem}
+For rational input as above, the exact value $D(X,C)$ and an optimal deterministic semialgebraic policy can be computed by real quantifier elimination. In particular, strict savings over $d^*$ are decidable. For each $m\geq2$ there is a nondegenerate cube with $D(X,C)=2$ and $d^*=m$, also with a bounded open rational cost prior.
+\end{theorem}
+
+\section{An exact recursion on histories}
+For a transcript $H=(q_1,y_1,\ldots,q_j,y_j)$, put
+\[
+ F(H)=\{c\in C:q_i^\top c=y_i\text{ for every }i\leq j\}.
+\]
+With membership predicates supplied by the input, define first-order formulas over the ordered real field:
+\begin{align*}
+ \Win_0(H)={}&\exists x\ \bigl[x\in X\ \land\
+ \forall c,u\ ((c\in F(H)\land u\in X)\Rightarrow (x-u)^\top c\leq0)\bigr],\\
+ \Win_{r+1}(H)={}&\Win_0(H)\ \lor\
+ \exists q\ \forall y\ \Win_r(H,(q,y)).
+\end{align*}
+When a history is impossible the first formula is true because $X$ is nonempty. Thus the universal quantifier over $y$ imposes just the required conditions at feasible answers.
+
+The formula $\Win_0$ is exactly the stop condition. Suppose the interpretation is correct at depth $r$. At a nonterminal history, any policy winning within $r+1$ queries chooses a first query $q$. Each feasible answer leaves a winning continuation of depth at most $r$. Conversely, if $q$ witnesses the existential statement, each feasible answer has such a continuation. This proves the interpretation by induction, without restricting the original policy class. A possible history always has a single fixed cost consistent with all its answers.
+
+All atoms have degree at most two in the quantified and free variables, and the recursion contains one copy of the previous formula at each step. At depths at most $d$, the formulas therefore have polynomial description length. The resulting quantifier-elimination computation can be expensive. Testing $\Win_k(\varnothing)$ for $k=0,\ldots,d$ gives the first true depth, since measuring the entire coordinate basis reveals the cost. To compute $d^*$, enumerate the vertices from feasible bases, test whether their normal cones meet $C$, and take the rational rank of their differences. If $d^*>0$, the formula $\Win_{d^*-1}(\varnothing)$ tests strict savings.
+
+For policy synthesis, eliminate quantifiers in
+\[
+ \Good_r(H,q)=\forall y\,\Win_{r-1}(H,(q,y)),\qquad r>0,
+\]
+retaining $H$ and $q$ as free variables. At nonterminal winning histories its $q$-fiber is nonempty. Cylindrical algebraic decomposition \cite{collins} with the history coordinates ordered first provides a semialgebraic selection. On each base cell choose a cell in the $q$-fiber and select the coordinates successively. Choose the prescribed value on a graph, a midpoint of a bounded interval, a point one unit past the finite end of a half-line, or zero on the whole line. All choices are semialgebraic. The same construction selects $x$ from the terminal witness relation. Equivalently, the algorithm can choose the first common optimal vertex. A nonempty intersection of optimal faces of a polytope is a face, since there are finitely many different faces. This produces a policy achieving the optimal depth in the exact-real query model.
+
+\section{The fixed benchmark and a lower bound}
+A fixed dataset that is pointwise sufficient at every cost in the ambient-open prior must be globally sufficient in the full-argmin sense. Indeed, suppose two equal-answer costs have different optimal faces. Take a vertex of one face absent from the other, and pick a linear objective uniquely exposing that vertex on $X$. Add the same sufficiently small positive multiple of that objective to both costs. The perturbed costs stay in $C$ and retain equal answers. The chosen vertex is now the unique optimum for the first cost and remains suboptimal for the second. This contradicts the existence of a common optimizer. Consequently $d^*$ is the exact fixed-query benchmark under either recovery requirement.
+
+A basis of $W(X,C)$ gives the general upper bound $D(X,C)\leq d^*$. A lower bound is the largest dimension of an optimal face over costs in $C$. For a terminating branch at $c$, let $K$ be the kernel of its query rows and let $x$ be the common optimum returned. If $u$ is also optimal at $c$, then $c+\delta h$ and $c-\delta h$ follow the same branch for any $h\in K$ and sufficiently small $\delta>0$. They both make $x$ at least as good as $u$. Since $c^\top(x-u)=0$, this gives $h^\top(x-u)=0$. The kernel therefore annihilates all directions of that optimal face. The branch needs at least its dimension in query rows.
+
+\section{Two queries can replace arbitrarily many}
+Use the standard-form cube $x_i+s_i=1$, $x_i,s_i\geq0$ for $i=0,\ldots,m$. Its vertices each have $m+1$ positive coordinates. Put $t=c_{x_0}-c_{s_0}$ and $z_i=c_{x_i}-c_{s_i}$ for $i\geq1$. Let $a_i=3i$ and $b_i=3i+2$. Use the prior
+\[
+       t>0,\qquad z_i>a_i-t,\qquad z_i>t-b_i\quad(1\leq i\leq m).
+\]
+These are strict rational affine inequalities in the full cost space. The feasible cost set is nonempty. When $t$ is outside $(a_i,b_i)$, its $z_i$ is positive. The open intervals are disjoint, so querying $t$ leaves at most one unknown sign. If there is one, query that $z_i$. Return $x_0=0$ and choose $x_i=1$ exactly for a negative $z_i$, with $x_i=0$ at a tie. This gives a common optimum for every consistent cost, including at interval endpoints.
+
+At $t=3i+1$ there is a cost in the prior with $z_i=0$ and all other $z_j>0$. Nearby, the unique optimum changes across $z_i=0$. Any fixed measurement kernel admitting a direction with nonzero $z_i$ increment therefore leaves two costs indistinguishable that have different unique optima. Thus the measurement span must contain the $m$ independent normals corresponding to $z_i$. Querying all $m$ of them attains this lower bound. In particular, $d^*=m$. A deterministic policy with one query has a fixed first query, so it cannot work for $m\geq2$. The two-query policy is optimal.
+
+\begin{figure}[t]
+\centering
+\setlength{\tabcolsep}{9pt}
+\begin{tabular}{c|ccc}
+unresolved response & $z_1$ & $z_2$ & $z_3$\\ \hline
+range of $t$ & $(3,5)$ & $(6,8)$ & $(9,11)$\\
+probe after $t=7$ & no & yes & no
+\end{tabular}
+\caption{At $t=7$, the prior forces $z_1,z_3>0$, so the second query only measures $z_2$. In this three-coordinate example two adaptive queries suffice while every fixed dataset needs three.}
+\end{figure}
+
+\section{Bounded priors}
+For a bounded example, use the cube with indices $1,\ldots,m$. Write $z=c_{s_1}$, $u_i=c_{x_i}-c_{s_i}-z+i$, and $v_i=c_{s_i}$ for $2\leq i\leq m$. These are invertible affine cost coordinates, and the effective gap in coordinate $i$ is $\delta_i=z-i+u_i$. Take the open rational box
+\[
+ |z-(m+1)/2|<m,\qquad |u_i|<1/4,\qquad |v_i|<1/4.
+\]
+Query $z$ and then the single $\delta_i$ with $|z-i|<1/4$ if there is one. The other signs are known, including at distance exactly $1/4$. At the interior point $z=i$, $u=v=0$, the $i$th gap is zero and the other gaps are nonzero. The same perturbation argument forces every fixed measurement span to contain the $m$ gap normals. The exact gap is again two versus $m$.
+
+The same argument applies to the bounded rational ellipsoid
+\[
+       ((z-(m+1)/2)/m)^2 + 16\sum_i u_i^2+16\sum_{i\geq2}v_i^2 < 1 .
+\]
+This is an extension beyond the polyhedral question. Its membership inequality can also be used directly in the recursion. The results concern deterministic exact queries and worst-case depth. No efficient preprocessing or bit-complexity claim is made. Sample-based recovery and fixed affine reformulations are treated separately in \cite{compression}.
+
+\section*{AI assistance}
+ChatGPT Astra 6.2 (OpenAI) generated the recovered proofs, bounded-prior supplement and original finite replay under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked the primary sources and prepared this manuscript, extended replay and illustration. DannyExperiments is the project citation identity.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}
